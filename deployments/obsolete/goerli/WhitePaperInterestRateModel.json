@@ -1,0 +1,325 @@
+{
+  "address": "0x7132D1aE198D024952EB7172E966a94d44d027Fb",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "baseRatePerYear",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "multiplierPerYear",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "baseRatePerBlock",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "multiplierPerBlock",
+          "type": "uint256"
+        }
+      ],
+      "name": "NewInterestParams",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "baseRatePerBlock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "blocksPerYear",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "cash",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "borrows",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserves",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBorrowRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "cash",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "borrows",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserves",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserveFactorMantissa",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSupplyRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "isInterestRateModel",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "multiplierPerBlock",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "cash",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "borrows",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reserves",
+          "type": "uint256"
+        }
+      ],
+      "name": "utilizationRate",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "pure",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xed7e659eccbf0193c3af3c6ced1686af332f63e4a73263f8b3ca444a74a24077",
+  "receipt": {
+    "to": null,
+    "from": "0x03eE60B0De0d9b48C5A09E73c3fdF80fEB86AeEF",
+    "contractAddress": "0x7132D1aE198D024952EB7172E966a94d44d027Fb",
+    "transactionIndex": 21,
+    "gasUsed": "277103",
+    "logsBloom": "0x00000000000000000000000000080000000000000000000000000000000000000000000000000000000000000000000008000000000000000000000000000000000000000000000010000000000000000000000000000000000000000000000000000100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000010000000000000000000000000000001000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0xee3fb1d98f7f4d976516f61725ed8671a729dfd9d4baeeeed450fbac1f15cda0",
+    "transactionHash": "0xed7e659eccbf0193c3af3c6ced1686af332f63e4a73263f8b3ca444a74a24077",
+    "logs": [
+      {
+        "transactionIndex": 21,
+        "blockNumber": 8421445,
+        "transactionHash": "0xed7e659eccbf0193c3af3c6ced1686af332f63e4a73263f8b3ca444a74a24077",
+        "address": "0x7132D1aE198D024952EB7172E966a94d44d027Fb",
+        "topics": [
+          "0xf35fa19c15e9ba782633a5df62a98b20217151addc68e3ff2cd623a48d37ec27"
+        ],
+        "data": "0x00000000000000000000000000000000000000000000000000000000000011ac000000000000000000000000000000000000000000000000000000000000585f",
+        "logIndex": 40,
+        "blockHash": "0xee3fb1d98f7f4d976516f61725ed8671a729dfd9d4baeeeed450fbac1f15cda0"
+      }
+    ],
+    "blockNumber": 8421445,
+    "cumulativeGasUsed": "6139460",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "9512937595",
+    "47564687975"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "156080bbde1cfb1b09a9d94dbec9eb2c",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.10+commit.fc410830\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"baseRatePerYear\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"multiplierPerYear\",\"type\":\"uint256\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"baseRatePerBlock\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"multiplierPerBlock\",\"type\":\"uint256\"}],\"name\":\"NewInterestParams\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"baseRatePerBlock\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"blocksPerYear\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"cash\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"borrows\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reserves\",\"type\":\"uint256\"}],\"name\":\"getBorrowRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"cash\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"borrows\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reserves\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reserveFactorMantissa\",\"type\":\"uint256\"}],\"name\":\"getSupplyRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"isInterestRateModel\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"multiplierPerBlock\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"cash\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"borrows\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reserves\",\"type\":\"uint256\"}],\"name\":\"utilizationRate\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"pure\",\"type\":\"function\"}],\"devdoc\":{\"author\":\"Compound\",\"kind\":\"dev\",\"methods\":{\"constructor\":{\"params\":{\"baseRatePerYear\":\"The approximate target base APR, as a mantissa (scaled by BASE)\",\"multiplierPerYear\":\"The rate of increase in interest rate wrt utilization (scaled by BASE)\"}},\"getBorrowRate(uint256,uint256,uint256)\":{\"params\":{\"borrows\":\"The amount of borrows in the market\",\"cash\":\"The amount of cash in the market\",\"reserves\":\"The amount of reserves in the market\"},\"returns\":{\"_0\":\"The borrow rate percentage per block as a mantissa (scaled by BASE)\"}},\"getSupplyRate(uint256,uint256,uint256,uint256)\":{\"params\":{\"borrows\":\"The amount of borrows in the market\",\"cash\":\"The amount of cash in the market\",\"reserveFactorMantissa\":\"The current reserve factor for the market\",\"reserves\":\"The amount of reserves in the market\"},\"returns\":{\"_0\":\"The supply rate percentage per block as a mantissa (scaled by BASE)\"}},\"utilizationRate(uint256,uint256,uint256)\":{\"params\":{\"borrows\":\"The amount of borrows in the market\",\"cash\":\"The amount of cash in the market\",\"reserves\":\"The amount of reserves in the market (currently unused)\"},\"returns\":{\"_0\":\"The utilization rate as a mantissa between [0, BASE]\"}}},\"title\":\"Compound's WhitePaperInterestRateModel Contract\",\"version\":1},\"userdoc\":{\"kind\":\"user\",\"methods\":{\"baseRatePerBlock()\":{\"notice\":\"The base interest rate which is the y-intercept when utilization rate is 0\"},\"blocksPerYear()\":{\"notice\":\"The approximate number of blocks per year that is assumed by the interest rate model\"},\"constructor\":{\"notice\":\"Construct an interest rate model\"},\"getBorrowRate(uint256,uint256,uint256)\":{\"notice\":\"Calculates the current borrow rate per block, with the error code expected by the market\"},\"getSupplyRate(uint256,uint256,uint256,uint256)\":{\"notice\":\"Calculates the current supply rate per block\"},\"isInterestRateModel()\":{\"notice\":\"Indicator that this is an InterestRateModel contract (for inspection)\"},\"multiplierPerBlock()\":{\"notice\":\"The multiplier of utilization rate that gives the slope of the interest rate\"},\"utilizationRate(uint256,uint256,uint256)\":{\"notice\":\"Calculates the utilization rate of the market: `borrows / (cash + borrows - reserves)`\"}},\"notice\":\"The parameterized model described in section 2.4 of the original Compound Protocol whitepaper\",\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/WhitePaperInterestRateModel.sol\":\"WhitePaperInterestRateModel\"},\"evmVersion\":\"london\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/InterestRateModel.sol\":{\"content\":\"// SPDX-License-Identifier: BSD-3-Clause\\npragma solidity ^0.8.10;\\n\\n/**\\n  * @title Compound's InterestRateModel Interface\\n  * @author Compound\\n  */\\nabstract contract InterestRateModel {\\n    /// @notice Indicator that this is an InterestRateModel contract (for inspection)\\n    bool public constant isInterestRateModel = true;\\n\\n    /**\\n      * @notice Calculates the current borrow interest rate per block\\n      * @param cash The total amount of cash the market has\\n      * @param borrows The total amount of borrows the market has outstanding\\n      * @param reserves The total amount of reserves the market has\\n      * @return The borrow rate per block (as a percentage, and scaled by 1e18)\\n      */\\n    function getBorrowRate(uint cash, uint borrows, uint reserves) virtual external view returns (uint);\\n\\n    /**\\n      * @notice Calculates the current supply interest rate per block\\n      * @param cash The total amount of cash the market has\\n      * @param borrows The total amount of borrows the market has outstanding\\n      * @param reserves The total amount of reserves the market has\\n      * @param reserveFactorMantissa The current reserve factor the market has\\n      * @return The supply rate per block (as a percentage, and scaled by 1e18)\\n      */\\n    function getSupplyRate(uint cash, uint borrows, uint reserves, uint reserveFactorMantissa) virtual external view returns (uint);\\n}\\n\",\"keccak256\":\"0x470821c8ff2120381ead6f54dba5c7b4fc0209682062bde51ea20291176aa0be\",\"license\":\"BSD-3-Clause\"},\"contracts/WhitePaperInterestRateModel.sol\":{\"content\":\"// SPDX-License-Identifier: BSD-3-Clause\\npragma solidity ^0.8.10;\\n\\nimport \\\"./InterestRateModel.sol\\\";\\n\\n/**\\n  * @title Compound's WhitePaperInterestRateModel Contract\\n  * @author Compound\\n  * @notice The parameterized model described in section 2.4 of the original Compound Protocol whitepaper\\n  */\\ncontract WhitePaperInterestRateModel is InterestRateModel {\\n    event NewInterestParams(uint baseRatePerBlock, uint multiplierPerBlock);\\n\\n    uint256 private constant BASE = 1e18;\\n\\n    /**\\n     * @notice The approximate number of blocks per year that is assumed by the interest rate model\\n     */\\n    uint public constant blocksPerYear = 2102400;\\n\\n    /**\\n     * @notice The multiplier of utilization rate that gives the slope of the interest rate\\n     */\\n    uint public multiplierPerBlock;\\n\\n    /**\\n     * @notice The base interest rate which is the y-intercept when utilization rate is 0\\n     */\\n    uint public baseRatePerBlock;\\n\\n    /**\\n     * @notice Construct an interest rate model\\n     * @param baseRatePerYear The approximate target base APR, as a mantissa (scaled by BASE)\\n     * @param multiplierPerYear The rate of increase in interest rate wrt utilization (scaled by BASE)\\n     */\\n    constructor(uint baseRatePerYear, uint multiplierPerYear) public {\\n        baseRatePerBlock = baseRatePerYear / blocksPerYear;\\n        multiplierPerBlock = multiplierPerYear / blocksPerYear;\\n\\n        emit NewInterestParams(baseRatePerBlock, multiplierPerBlock);\\n    }\\n\\n    /**\\n     * @notice Calculates the utilization rate of the market: `borrows / (cash + borrows - reserves)`\\n     * @param cash The amount of cash in the market\\n     * @param borrows The amount of borrows in the market\\n     * @param reserves The amount of reserves in the market (currently unused)\\n     * @return The utilization rate as a mantissa between [0, BASE]\\n     */\\n    function utilizationRate(uint cash, uint borrows, uint reserves) public pure returns (uint) {\\n        // Utilization rate is 0 when there are no borrows\\n        if (borrows == 0) {\\n            return 0;\\n        }\\n\\n        return borrows * BASE / (cash + borrows - reserves);\\n    }\\n\\n    /**\\n     * @notice Calculates the current borrow rate per block, with the error code expected by the market\\n     * @param cash The amount of cash in the market\\n     * @param borrows The amount of borrows in the market\\n     * @param reserves The amount of reserves in the market\\n     * @return The borrow rate percentage per block as a mantissa (scaled by BASE)\\n     */\\n    function getBorrowRate(uint cash, uint borrows, uint reserves) override public view returns (uint) {\\n        uint ur = utilizationRate(cash, borrows, reserves);\\n        return (ur * multiplierPerBlock / BASE) + baseRatePerBlock;\\n    }\\n\\n    /**\\n     * @notice Calculates the current supply rate per block\\n     * @param cash The amount of cash in the market\\n     * @param borrows The amount of borrows in the market\\n     * @param reserves The amount of reserves in the market\\n     * @param reserveFactorMantissa The current reserve factor for the market\\n     * @return The supply rate percentage per block as a mantissa (scaled by BASE)\\n     */\\n    function getSupplyRate(uint cash, uint borrows, uint reserves, uint reserveFactorMantissa) override public view returns (uint) {\\n        uint oneMinusReserveFactor = BASE - reserveFactorMantissa;\\n        uint borrowRate = getBorrowRate(cash, borrows, reserves);\\n        uint rateToPool = borrowRate * oneMinusReserveFactor / BASE;\\n        return utilizationRate(cash, borrows, reserves) * rateToPool / BASE;\\n    }\\n}\\n\",\"keccak256\":\"0x46c9d3ee85dc9a98f39694bb0b12981155f176300d1b7742cce59f296588e197\",\"license\":\"BSD-3-Clause\"}},\"version\":1}",
+  "bytecode": "0x608060405234801561001057600080fd5b5060405161041738038061041783398101604081905261002f91610099565b61003c62201480836100bd565b60015561004c62201480826100bd565b60008190556001546040517ff35fa19c15e9ba782633a5df62a98b20217151addc68e3ff2cd623a48d37ec279261008a928252602082015260400190565b60405180910390a150506100df565b600080604083850312156100ac57600080fd5b505080516020909101519092909150565b6000826100da57634e487b7160e01b600052601260045260246000fd5b500490565b610329806100ee6000396000f3fe608060405234801561001057600080fd5b506004361061007d5760003560e01c80638726bb891161005b5780638726bb89146100d3578063a385fb96146100dc578063b8168816146100e6578063f14039de146100f957600080fd5b806315f24053146100825780632191f92a146100a85780636e71e2d8146100c0575b600080fd5b61009561009036600461020f565b610102565b6040519081526020015b60405180910390f35b6100b0600181565b604051901515815260200161009f565b6100956100ce36600461020f565b61014b565b61009560005481565b6100956220148081565b6100956100f436600461023b565b610193565b61009560015481565b60008061011085858561014b565b9050600154670de0b6b3a76400006000548361012c9190610283565b61013691906102a2565b61014091906102c4565b9150505b9392505050565b60008261015a57506000610144565b8161016584866102c4565b61016f91906102dc565b610181670de0b6b3a764000085610283565b61018b91906102a2565b949350505050565b6000806101a883670de0b6b3a76400006102dc565b905060006101b7878787610102565b90506000670de0b6b3a76400006101ce8484610283565b6101d891906102a2565b9050670de0b6b3a7640000816101ef8a8a8a61014b565b6101f99190610283565b61020391906102a2565b98975050505050505050565b60008060006060848603121561022457600080fd5b505081359360208301359350604090920135919050565b6000806000806080858703121561025157600080fd5b5050823594602084013594506040840135936060013592509050565b634e487b7160e01b600052601160045260246000fd5b600081600019048311821515161561029d5761029d61026d565b500290565b6000826102bf57634e487b7160e01b600052601260045260246000fd5b500490565b600082198211156102d7576102d761026d565b500190565b6000828210156102ee576102ee61026d565b50039056fea264697066735822122002982c647fd7f2d4b5db5cf52e43764510fe4932bd0571e72cb41a9eab02505564736f6c634300080a0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061007d5760003560e01c80638726bb891161005b5780638726bb89146100d3578063a385fb96146100dc578063b8168816146100e6578063f14039de146100f957600080fd5b806315f24053146100825780632191f92a146100a85780636e71e2d8146100c0575b600080fd5b61009561009036600461020f565b610102565b6040519081526020015b60405180910390f35b6100b0600181565b604051901515815260200161009f565b6100956100ce36600461020f565b61014b565b61009560005481565b6100956220148081565b6100956100f436600461023b565b610193565b61009560015481565b60008061011085858561014b565b9050600154670de0b6b3a76400006000548361012c9190610283565b61013691906102a2565b61014091906102c4565b9150505b9392505050565b60008261015a57506000610144565b8161016584866102c4565b61016f91906102dc565b610181670de0b6b3a764000085610283565b61018b91906102a2565b949350505050565b6000806101a883670de0b6b3a76400006102dc565b905060006101b7878787610102565b90506000670de0b6b3a76400006101ce8484610283565b6101d891906102a2565b9050670de0b6b3a7640000816101ef8a8a8a61014b565b6101f99190610283565b61020391906102a2565b98975050505050505050565b60008060006060848603121561022457600080fd5b505081359360208301359350604090920135919050565b6000806000806080858703121561025157600080fd5b5050823594602084013594506040840135936060013592509050565b634e487b7160e01b600052601160045260246000fd5b600081600019048311821515161561029d5761029d61026d565b500290565b6000826102bf57634e487b7160e01b600052601260045260246000fd5b500490565b600082198211156102d7576102d761026d565b500190565b6000828210156102ee576102ee61026d565b50039056fea264697066735822122002982c647fd7f2d4b5db5cf52e43764510fe4932bd0571e72cb41a9eab02505564736f6c634300080a0033",
+  "devdoc": {
+    "author": "Compound",
+    "kind": "dev",
+    "methods": {
+      "constructor": {
+        "params": {
+          "baseRatePerYear": "The approximate target base APR, as a mantissa (scaled by BASE)",
+          "multiplierPerYear": "The rate of increase in interest rate wrt utilization (scaled by BASE)"
+        }
+      },
+      "getBorrowRate(uint256,uint256,uint256)": {
+        "params": {
+          "borrows": "The amount of borrows in the market",
+          "cash": "The amount of cash in the market",
+          "reserves": "The amount of reserves in the market"
+        },
+        "returns": {
+          "_0": "The borrow rate percentage per block as a mantissa (scaled by BASE)"
+        }
+      },
+      "getSupplyRate(uint256,uint256,uint256,uint256)": {
+        "params": {
+          "borrows": "The amount of borrows in the market",
+          "cash": "The amount of cash in the market",
+          "reserveFactorMantissa": "The current reserve factor for the market",
+          "reserves": "The amount of reserves in the market"
+        },
+        "returns": {
+          "_0": "The supply rate percentage per block as a mantissa (scaled by BASE)"
+        }
+      },
+      "utilizationRate(uint256,uint256,uint256)": {
+        "params": {
+          "borrows": "The amount of borrows in the market",
+          "cash": "The amount of cash in the market",
+          "reserves": "The amount of reserves in the market (currently unused)"
+        },
+        "returns": {
+          "_0": "The utilization rate as a mantissa between [0, BASE]"
+        }
+      }
+    },
+    "title": "Compound's WhitePaperInterestRateModel Contract",
+    "version": 1
+  },
+  "userdoc": {
+    "kind": "user",
+    "methods": {
+      "baseRatePerBlock()": {
+        "notice": "The base interest rate which is the y-intercept when utilization rate is 0"
+      },
+      "blocksPerYear()": {
+        "notice": "The approximate number of blocks per year that is assumed by the interest rate model"
+      },
+      "constructor": {
+        "notice": "Construct an interest rate model"
+      },
+      "getBorrowRate(uint256,uint256,uint256)": {
+        "notice": "Calculates the current borrow rate per block, with the error code expected by the market"
+      },
+      "getSupplyRate(uint256,uint256,uint256,uint256)": {
+        "notice": "Calculates the current supply rate per block"
+      },
+      "isInterestRateModel()": {
+        "notice": "Indicator that this is an InterestRateModel contract (for inspection)"
+      },
+      "multiplierPerBlock()": {
+        "notice": "The multiplier of utilization rate that gives the slope of the interest rate"
+      },
+      "utilizationRate(uint256,uint256,uint256)": {
+        "notice": "Calculates the utilization rate of the market: `borrows / (cash + borrows - reserves)`"
+      }
+    },
+    "notice": "The parameterized model described in section 2.4 of the original Compound Protocol whitepaper",
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 25072,
+        "contract": "contracts/WhitePaperInterestRateModel.sol:WhitePaperInterestRateModel",
+        "label": "multiplierPerBlock",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 25075,
+        "contract": "contracts/WhitePaperInterestRateModel.sol:WhitePaperInterestRateModel",
+        "label": "baseRatePerBlock",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_uint256"
+      }
+    ],
+    "types": {
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
