@@ -35,7 +35,7 @@ module.exports = {
         },
       },
       {
-        version: "0.8.10",
+        version: "0.8.19",
         settings: {
           optimizer: {
             enabled: true,
@@ -55,7 +55,7 @@ module.exports = {
   networks: {
     hardhat: {
       forking: {
-        url: `https://eth-mainnet.g.alchemy.com/v2/UsNTZ5-Jy115VO965zI7GONvYnhMgdrT`,
+        url: process.env.MAIN_NODE,
         enabled: true,
       },
       saveDeployments: true,
@@ -75,6 +75,15 @@ module.exports = {
     goerli: {
       saveDeployments: true,
       url: process.env.GOERLI_NODE || "",
+      accounts: [
+        process.env.PRIVATE_KEY0,
+        process.env.PRIVATE_KEY1,
+        process.env.PRIVATE_KEY2,
+      ],
+    },
+    main: {
+      saveDeployments: true,
+      url: process.env.MAIN_NODE || "",
       accounts: [
         process.env.PRIVATE_KEY0,
         process.env.PRIVATE_KEY1,

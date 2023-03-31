@@ -70,4 +70,4 @@ module.exports = async ({
   console.log(`JumpRateModelV2 deployed to ${JumpRateModelV2_3.address}`);
 };
 
-module.exports.tags = ["RateModels"];
+module.exports.tags = ["tRateModels", "Test"];

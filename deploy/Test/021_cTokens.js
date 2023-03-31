@@ -19,7 +19,7 @@ module.exports = async ({
     args: [],
   });
   // USDC
-  const usdc = params.USDC;
+  const usdc = (await deployments.get("USDC")).address;
   const stableRM = await deployments.get("StableRateModelV2");
   const usdcContract = await getContractAt("ERC20MockToken", usdc);
   let underlyingDecimals = await usdcContract.decimals();
@@ -30,8 +30,6 @@ module.exports = async ({
     .mul(2);
   let name = "Tonpound USD Coin";
   let symbol = "tUSDC";
-  console.log(`${symbol} - ${initialExchangeRateMantissa}`);
-
   const decimals = 8;
 
   const cUSDC = await deploy("cUSDC", {
@@ -53,7 +51,7 @@ module.exports = async ({
   console.log(`tUSDC deployed to ${cUSDC.address}`);
 
   // USDT
-  const usdt = params.USDT;
+  const usdt = (await deployments.get("USDT")).address;
   const usdtContract = await getContractAt("ERC20MockToken", usdt);
   underlyingDecimals = await usdtContract.decimals();
   initialExchangeRateMantissa = BigNumber.from(10)
@@ -61,7 +59,6 @@ module.exports = async ({
     .mul(2);
   name = "Tonpound USDT";
   symbol = "tUSDT";
-  console.log(`${symbol} - ${initialExchangeRateMantissa}`);
 
   const cUsdt = await deploy("cUSDT", {
     contract: "CErc20Delegator",
@@ -82,21 +79,20 @@ module.exports = async ({
   console.log(`cUsdt deployed to ${cUsdt.address}`);
 
   // DAI
-  const dai = params.DAI;
+  const dai = (await deployments.get("DAI")).address;
   const daiContract = await getContractAt("ERC20MockToken", dai);
   underlyingDecimals = await daiContract.decimals();
   initialExchangeRateMantissa = BigNumber.from(10)
     .pow(8 + underlyingDecimals)
     .mul(2);
   name = "Tonpound Dai";
-  symbol = "tDAI";
-  console.log(`${symbol} - ${initialExchangeRateMantissa}`);
+  symbol = "tUSDT";
 
   const cDai = await deploy("cDAI", {
     contract: "CErc20Delegator",
     from: deployer,
     args: [
-      dai,
+      usdt,
       unitroller,
       stableRM.address,
       initialExchangeRateMantissa,
@@ -111,7 +107,7 @@ module.exports = async ({
   console.log(`cDAI deployed to ${cDai.address}`);
 
   // WETH
-  const weth = params.WETH;
+  const weth = (await deployments.get("WETH")).address;
   const rateModelWeth = await deployments.get("JumpRateModelV2_1");
   const wethContract = await getContractAt("ERC20MockToken", weth);
   underlyingDecimals = await wethContract.decimals();
@@ -120,7 +116,6 @@ module.exports = async ({
     .mul(2);
   name = "Tonpound Wrapped ETH";
   symbol = "tWETH";
-  console.log(`${symbol} - ${initialExchangeRateMantissa}`);
 
   const cWeth = await deploy("cWeth", {
     contract: "CErc20Delegator",
@@ -141,7 +136,7 @@ module.exports = async ({
   console.log(`tWeth deployed to ${cWeth.address}`);
 
   // WBTC
-  const wbtc = params.WBTC;
+  const wbtc = (await deployments.get("WBTC")).address;
   const rateModelWbtc = await deployments.get("JumpRateModelV2_2");
   const wbtcContract = await getContractAt("ERC20MockToken", wbtc);
   underlyingDecimals = await wbtcContract.decimals();
@@ -150,9 +145,9 @@ module.exports = async ({
     .mul(2);
   name = "Tonpound Wrapped BTC";
   symbol = "tWBTC";
-  console.log(`${symbol} - ${initialExchangeRateMantissa}`);
 
   const cWbtc = await deploy("cWbtc", {
+    // 0x2073d38198511F5Ed8d893AB43A03bFDEae0b1A5
     contract: "CErc20Delegator",
     from: deployer,
     args: [
@@ -171,5 +166,5 @@ module.exports = async ({
   console.log(`tWbtc deployed to ${cWbtc.address}`);
 };
 
-module.exports.tags = ["CERC"];
-// module.exports.dependencies = ["RateModels"];
+module.exports.tags = ["tCERC", "Test"];
+module.exports.dependencies = ["tRateModels"];

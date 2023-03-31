@@ -2,16 +2,16 @@ module.exports = {
   params: {
     // 011
     closeFactor: "500000000000000000", // 50%
-    // 1.10 => (10% - reservesfee) incentive for liquidators
-    liquidationIncentive: "1100000000000000000",
-    // can be deployer (admin)
-    pauseGuardian: "0x03eE60B0De0d9b48C5A09E73c3fdF80fEB86AeEF",
-    borrowCapGuardian: "0x03eE60B0De0d9b48C5A09E73c3fdF80fEB86AeEF",
+    // 1.20 => (20% - reservesfee) incentive for liquidators
+    liquidationIncentive: "1200000000000000000",
+    // can be deployer (admin). set address:
+    pauseGuardian: "0x0000000000000000000000000000000000000001",
+    borrowCapGuardian: "0x0000000000000000000000000000000000000001",
 
-    // 012
-    TPI: "0x53a85c75E342840e36F972b6Fc909DE09cd415a5",
-    treasury: "0x087200B15565fcFEEe8f2967EFF1fd5d4B9e5721",
-    gNft: "0x3a487ddbC5d704D22EB3A1d9f345065744E10f3C",
+    // 012 addresses
+    // TPI: "0x0000000000000000000000000000000000000001",
+    treasury: "0x0529CEa607586B33148B77c165f88362c9B00B11",
+    gNft: "0x2e86fA4440d93b1BFfEa5cA673314ef54216D0a8",
 
     // 017
     collateralFactor: "500000000000000000", // 50%
@@ -35,46 +35,74 @@ module.exports = {
       jumpMultiplierPerYear: "1000000000000000000",
     },
     ptonRM: {
-      baseRatePerYear: "20000000000000000",
+      baseRatePerYear: "50000000000000000", // 5%
       multiplierPerYear: "225000000000000000",
       jumpMultiplierPerYear: "5000000000000000000",
     },
 
     // tokens (needed for cTokens creating)
-    WETH: "0xbAb960249b6F939aF3B5FF56Fd68bDc2F7a6f37A",
-    USDC: "0x91daD0894Feff018dEEA79852E7843076F2F97B5",
-    USDT: "0x5e2Ff4B79D96A02de53d535FB3659484747cfF2b",
-    DAI: "0x5D64Ab68538752236b3433D55B1275Ee61178153",
-    WBTC: "0x55447e82d165eA75C0c319241800490856F43F38",
-    pTON: "0x2Ea9B6B37D67a07556fAa734Df0bAe9Cd7712418",
+    WETH: "0xC02aaA39b223FE8D0A0e5C4F27eAD9083C756Cc2",
+    USDC: "0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48",
+    USDT: "0xdAC17F958D2ee523a2206206994597C13D831ec7",
+    DAI: "0x6B175474E89094C44Da98b954EedeAC495271d0F",
+    WBTC: "0x2260FAC5E5542a773Aa44fBCfeDf7C193bc2C599",
+    pTON: "0x6256aB9480B84Cf70d75773121C0523F87B0D588",
 
-    // stTon
-    stTon: "0x9Ac34Ae030Af089A421FbB09cAbC48184B15FEEa",
+    // stTon address
+    stTon: "0x0fB2E7c2d2754476aAa84762e44d3EE328AA9Ea2",
 
-    // reserve factor 25% of income goes to reserves
+    // reserve factor 30% of income goes to reserves
     // set in cToken, can be different for each market
-    reserveFactor: "250000000000000000",
+    reserveFactor: "300000000000000000",
 
     // price oracle
-    twapPeriod: "2700", // 45 min
-    baseAssetFeed: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e", // weth chainlink pricefeed
+    twapPeriod: "1800", // 30 min
+    baseAssetFeed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419", // weth chainlink pricefeed
+
+    // https://docs.chain.link/data-feeds/price-feeds/addresses
     chainlink: {
-      usdc: { feed: "0xAb5c49580294Aff77670F839ea425f5b78ab3Ae7", decimals: 8 },
-      usdt: { feed: "0xAb5c49580294Aff77670F839ea425f5b78ab3Ae7", decimals: 8 }, // set for mainnet
-      weth: { feed: "0xD4a33860578De61DBAbDc8BFdb98FD742fA7028e", decimals: 8 },
-      wbtc: { feed: "0xA39434A63A52E749F02807ae27335515BA4b07F7", decimals: 8 },
-      dai: { feed: "0x0d79df66BE487753B02D015Fb622DED7f0E9798d", decimals: 8 },
+      usdc: {
+        feed: "0x8fFfFfd4AfB6115b954Bd326cbe7B4BA576818f6",
+        decimals: 8,
+        heartbeat: "86400",
+      },
+      usdt: {
+        feed: "0x3E7d1eAB13ad0104d2750B8863b489D65364e32D",
+        decimals: 8,
+        heartbeat: "86400",
+      },
+      weth: {
+        feed: "0x5f4eC3Df9cbd43714FE2740f5E3616155c5b8419",
+        decimals: 8,
+        heartbeat: "3600",
+      },
+      wbtc: {
+        feed: "0xF4030086522a5bEEa4988F8cA5B36dbC97BeE88c",
+        decimals: 8,
+        heartbeat: "3600",
+      },
+      dai: {
+        feed: "0xAed0c38402a5d19df6E4c03F4E2DceD6e29c1ee9",
+        decimals: 8,
+        heartbeat: "3600",
+      },
     },
+
+    // pool addresses with high liquidity and observations
     poolTwap: {
-      pton_ETH: "0xF5b5b107d0E5b23aBf2376b89fd6Ea25B44819A1",
+      weth_usdc: "0x88e6A0c2dDD26FEEb64F039a2c41296FcB3f5640",
+      weth_usdt: "0x11b815efB8f581194ae79006d24E0d814B7697F6",
+      weth_wbtc: "0xCBCdF9626bC03E24f779434178A73a0B4bad62eD",
+      weth_dai: "0xC2e9F25Be6257c210d7Adf0D4Cd6E3E881ba25f8",
+      weth_pton: "0xe15E8c0d1e2C751f8a881E35FaE7f2037A4D20f4",
     },
 
     // cTokens
-    // cWETH: "0x021b5Fe8A05456319E48B3858DcAB4D65FedeA15",
-    // cUsdc: "0x4A37D65B6809383e95E9D7cF5D4e453E3B666ED7",
-    // cUsdt: "0xb526D566464fb1cd0f24F8A6D517d00039950213",
-    // cDai: "0xC74B568DB2F22fa8170907faef863A86BfFe8e0e",
-    // cWbtc: "0xAfbdd7541662d7F4cDe3a126212f781d2e97F743",
-    // cpTon: "0xADD06D63b4737494AffF97055aF4BfF48C7A1FaB",
+    // cWETH: "",
+    // cUsdc: "",
+    // cUsdt: "",
+    // cDai: "",
+    // cWbtc: "",
+    // cpTon: "",
   },
 };

@@ -40,5 +40,5 @@ module.exports = async ({
   console.log(`Reserve factor ${reserveFactorMantissa} was set.`);
 };
 
-module.exports.tags = ["ReserveFactor"];
-// module.exports.dependencies = ["Comptroller"];
+module.exports.tags = ["tReserveFactor", "Test"];
+module.exports.dependencies = ["tCERC"];

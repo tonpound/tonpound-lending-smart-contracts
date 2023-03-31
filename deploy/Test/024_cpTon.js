@@ -21,7 +21,7 @@ module.exports = async ({
   const underlyingDecimals = await pTon.decimals();
   console.log("underlyingDecimals", underlyingDecimals);
   if (underlyingDecimals !== 9) {
-    console.log(`Wrong pTON decimals ${underlyingDecimals}`);
+    console.log("Wrong pTON decimals.");
     return;
   }
 
@@ -68,5 +68,5 @@ module.exports = async ({
   await tx.wait();
 };
 
-module.exports.tags = ["CPTON"];
+// module.exports.tags = ["CPTON", "Test"];
 // module.exports.dependencies = ["RateModels"];

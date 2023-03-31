@@ -10,10 +10,16 @@ module.exports = async ({
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
+  const dai = await deploy("DAI", {
+    contract: "ERC20MockToken",
+    from: deployer,
+    args: ["Dai stablecoin", "DAI"],
+  });
+
   const usdt = await deploy("USDT", {
     contract: "ERC20MockToken6",
     from: deployer,
-    args: ["Tether USD", "USDC"],
+    args: ["Tether USD", "USDT"],
   });
 
   const usdc = await deploy("USDC", {
@@ -22,22 +28,16 @@ module.exports = async ({
     args: ["Circle USD", "USDC"],
   });
 
-  const dai = await deploy("DAI", {
+  const weth = await deploy("WETH", {
     contract: "ERC20MockToken",
     from: deployer,
-    args: ["Dai stablecoin", "DAI"],
+    args: ["Wrapped Ethereum", "WETH"],
   });
 
   const wbtc = await deploy("WBTC", {
     contract: "ERC20MockToken8",
     from: deployer,
     args: ["Wrapped Bitcoin", "WBTC"],
-  });
-
-  const weth = await deploy("WETH", {
-    contract: "ERC20MockToken",
-    from: deployer,
-    args: ["Wrapped Ethereum", "WETH"],
   });
 
   const fakePTon = await deploy("fakePTon", {
@@ -68,4 +68,4 @@ module.exports = async ({
   console.log("WBTC:", wbtc.address);
   console.log("WETH:", weth.address);
 };
-module.exports.tags = ["ERC20"];
+module.exports.tags = ["tERC20", "Test"];

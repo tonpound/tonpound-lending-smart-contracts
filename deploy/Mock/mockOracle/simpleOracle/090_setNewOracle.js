@@ -16,5 +16,5 @@ module.exports = async ({
   console.log("Oracle updated");
 };
 
-module.exports.tags = ["UpdateOracle", "Test"];
+module.exports.tags = ["UpdateOracle"];
 // module.exports.dependencies = ["Oracle", "CERC", "CPTON"];

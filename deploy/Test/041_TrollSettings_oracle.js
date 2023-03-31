@@ -13,12 +13,12 @@ module.exports = async ({
   const unitroller = await deployments.get("Unitroller");
   const Unitroller = await getContractAt("Comptroller", unitroller.address);
 
-  const priceOracle = (await deployments.get("TonpoundPriceOracle")).address;
+  const priceOracle = (await deployments.get("PriceOracle")).address;
 
   console.log("Setting Oracle: ", priceOracle);
   const tx = await Unitroller._setPriceOracle(priceOracle);
   await tx.wait();
 };
 
-module.exports.tags = ["TrollSet3"];
-// module.exports.dependencies = ["TonPriceOracle"];
+module.exports.tags = ["tTrollSet3", "Test"];
+module.exports.dependencies = ["tComptroller", "tOracle"];

@@ -18,7 +18,7 @@ module.exports = async ({
   const cUsdt = (await deployments.get("cUSDT")).address;
   const cDai = (await deployments.get("cDAI")).address;
   const cWbtc = (await deployments.get("cWbtc")).address;
-  const cpTon = (await deployments.get("cpTon")).address;
+  // const cpTon = (await deployments.get("cpTon")).address;
 
   console.log(`Setting collateral factor for markets.`);
   let tx = await UnitrollerUpg._setCollateralFactor(
@@ -39,10 +39,10 @@ module.exports = async ({
   tx = await UnitrollerUpg._setCollateralFactor(cWbtc, params.collateralFactor);
   await tx.wait();
 
-  tx = await UnitrollerUpg._setCollateralFactor(cpTon, params.collateralFactor);
-  await tx.wait();
+  // tx = await UnitrollerUpg._setCollateralFactor(cpTon, params.collateralFactor);
+  // await tx.wait();
   console.log(`Done`);
 };
 
-module.exports.tags = ["TrollSet7", "Test"];
-// module.exports.dependencies = ["TonPriceOracle"];
+module.exports.tags = ["tTrollSet7", "Test"];
+module.exports.dependencies = ["tTrollSet4"];

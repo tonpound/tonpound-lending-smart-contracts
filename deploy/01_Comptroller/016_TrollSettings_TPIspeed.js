@@ -31,8 +31,7 @@ module.exports = async ({
   // 33_333_333 / 5256000 = 6.3419583 * 1e18 per block
   // const supplySpeed = utils.parseUnits("6.3419583", 18);
 
-  // for tests:  33_333_333 / 50400 = 661.37565
-  const supplySpeed = utils.parseUnits("661.37565", 18);
+  const supplySpeed = utils.parseUnits("6.3419583", 18);
   const supplySpeeds = [
     supplySpeed,
     supplySpeed,
@@ -52,5 +51,5 @@ module.exports = async ({
   console.log("TPI speeds were set.");
 };
 
-module.exports.tags = ["TrollSet6", "Test"];
+module.exports.tags = ["TrollSet6"];
 // module.exports.dependencies = ["Comptroller"];

@@ -28,3 +28,32 @@ For contract verification:
 ```
 npx hardhat --network <networkName> etherscan-verify
 ```
+
+
+## Mainnet Deploy order
+
+```
+npx hardhat deploy --network main --tags "TPI"
+
+npx hardhat deploy --network main --tags "Comptroller"
+npx hardhat deploy --network main --tags "TrollSet1"
+npx hardhat deploy --network main --tags "TrollSet2"
+
+npx hardhat deploy --network main --tags "RateModels"
+npx hardhat deploy --network main --tags "CERC"
+npx hardhat deploy --network main --tags "ReserveFactor"
+npx hardhat deploy --network main --tags "CPTON"
+
+npx hardhat deploy --network main --tags "TonPriceOracle"
+npx hardhat deploy --network main --tags "TwapOracle"
+
+npx hardhat deploy --network main --tags "TrollSet3"
+npx hardhat deploy --network main --tags "TrollSet4"
+npx hardhat deploy --network main --tags "TrollSet5"
+npx hardhat deploy --network main --tags "TrollSet6"
+npx hardhat deploy --network main --tags "TrollSet7"
+
+
+npx hardhat deploy --network hardhat --tags "Comptroller,TrollSet1,TrollSet2,RateModels,CERC,ReserveFactor,CPTON,TonPriceOracle,TrollSet3,TrollSet4,TrollSet5,TrollSet6,TrollSet7"
+
+```

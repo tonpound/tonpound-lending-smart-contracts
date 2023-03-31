@@ -18,4 +18,4 @@ module.exports = async ({
 };
 
 module.exports.tags = ["Timelock"];
-module.exports.dependencies = ["Comptroller"];
+// module.exports.dependencies = ["Comptroller"];

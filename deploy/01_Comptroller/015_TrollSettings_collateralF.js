@@ -20,33 +20,29 @@ module.exports = async ({
   const cWbtc = (await deployments.get("cWbtc")).address;
   const cpTon = (await deployments.get("cpTon")).address;
 
-  console.log(`Adding markets to Unitroller.`);
-
-  let tx = await UnitrollerUpg._supportMarket(cWETH);
+  console.log(`Setting collateral factor for markets.`);
+  let tx = await UnitrollerUpg._setCollateralFactor(
+    cWETH,
+    params.collateralFactor
+  );
   await tx.wait();
-  console.log(`Market ${cWETH} added`);
 
-  tx = await UnitrollerUpg._supportMarket(cUsdc);
+  tx = await UnitrollerUpg._setCollateralFactor(cUsdc, params.collateralFactor);
   await tx.wait();
-  console.log(`Market ${cUsdc} added`);
 
-  tx = await UnitrollerUpg._supportMarket(cUsdt);
+  tx = await UnitrollerUpg._setCollateralFactor(cUsdt, params.collateralFactor);
   await tx.wait();
-  console.log(`Market ${cUsdt} added`);
 
-  tx = await UnitrollerUpg._supportMarket(cDai);
+  tx = await UnitrollerUpg._setCollateralFactor(cDai, params.collateralFactor);
   await tx.wait();
-  console.log(`Market ${cDai} added`);
 
-  tx = await UnitrollerUpg._supportMarket(cWbtc);
+  tx = await UnitrollerUpg._setCollateralFactor(cWbtc, params.collateralFactor);
   await tx.wait();
-  console.log(`Market ${cWbtc} added`);
 
-  tx = await UnitrollerUpg._supportMarket(cpTon);
+  tx = await UnitrollerUpg._setCollateralFactor(cpTon, params.collateralFactor);
   await tx.wait();
-  console.log(`Market ${cpTon} added`);
-  console.log(`Markets added.`);
+  console.log(`Done`);
 };
 
-module.exports.tags = ["TrollSet4"];
-// module.exports.dependencies = ["CERC"];
+module.exports.tags = ["TrollSet5"];
+// module.exports.dependencies = ["TonPriceOracle"];

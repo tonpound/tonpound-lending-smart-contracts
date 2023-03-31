@@ -30,5 +30,5 @@ module.exports = async ({
   console.log(`Oracle prices were set.`);
 };
 
-module.exports.tags = ["SetTwapConfig", "Test"];
+module.exports.tags = ["SetTwapConfig"];
 // module.exports.dependencies = [""];

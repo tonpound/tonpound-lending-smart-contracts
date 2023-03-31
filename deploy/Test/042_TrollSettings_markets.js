@@ -18,7 +18,7 @@ module.exports = async ({
   const cUsdt = (await deployments.get("cUSDT")).address;
   const cDai = (await deployments.get("cDAI")).address;
   const cWbtc = (await deployments.get("cWbtc")).address;
-  const cpTon = (await deployments.get("cpTon")).address;
+  // const cpTon = (await deployments.get("cpTon")).address;
 
   console.log(`Adding markets to Unitroller.`);
 
@@ -42,11 +42,11 @@ module.exports = async ({
   await tx.wait();
   console.log(`Market ${cWbtc} added`);
 
-  tx = await UnitrollerUpg._supportMarket(cpTon);
-  await tx.wait();
-  console.log(`Market ${cpTon} added`);
-  console.log(`Markets added.`);
+  // tx = await UnitrollerUpg._supportMarket(cpTon);
+  // await tx.wait();
+  // console.log(`Market ${cpTon} added`);
+  // console.log(`Markets added.`);
 };
 
-module.exports.tags = ["TrollSet4"];
-// module.exports.dependencies = ["CERC"];
+module.exports.tags = ["tTrollSet4", "Test"];
+module.exports.dependencies = ["tTrollSet3"];

@@ -26,4 +26,4 @@ module.exports = async ({
   console.log("pTon deployed at:", pTon.address);
 };
 
-module.exports.tags = ["MockPTon", "Test"];
+module.exports.tags = ["MockPTon"];

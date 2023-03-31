@@ -10,7 +10,7 @@ module.exports = async ({
 
   const networkId = (await getChainId()).toString();
   if (networkId === "1") {
-    console.log(`Deployer and future admin: ${deployer}`);
+    console.log(`Deployer ${deployer}`);
     console.log(`Deploy to chain ${networkId} will start in 7 seconds`);
     await new Promise((resolve) => setTimeout(resolve, 7000));
     console.log("Start");
@@ -46,4 +46,4 @@ module.exports = async ({
   );
 };
 
-module.exports.tags = ["Comptroller"];
+module.exports.tags = ["tComptroller", "Test"];

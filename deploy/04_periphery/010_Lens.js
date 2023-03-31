@@ -15,4 +15,4 @@ module.exports = async ({
 };
 
 module.exports.tags = ["Lens"];
-module.exports.dependencies = ["Comptroller"];
+// module.exports.dependencies = ["Comptroller"];

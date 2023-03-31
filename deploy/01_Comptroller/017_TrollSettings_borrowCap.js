@@ -21,12 +21,12 @@ module.exports = async ({
   const cpTon = (await deployments.get("cpTon")).address;
 
   // borrow caps in terms of underlying tokens
-  const wethCap = utils.parseUnits("100000", "18");
+  const wethCap = utils.parseUnits("60", "18");
   const usdcCap = utils.parseUnits("100000", "6");
   const usdtCap = utils.parseUnits("100000", "6");
   const daiCap  = utils.parseUnits("100000", "18");
-  const wbtcCap = utils.parseUnits("50000", "8");
-  const pTonCap = utils.parseUnits("100000", "9");
+  const wbtcCap = utils.parseUnits("4", "8");
+  const pTonCap = utils.parseUnits("40000", "9");
 
   const contracts = [cWETH, cUsdc, cUsdt, cDai, cWbtc, cpTon];
   const caps = [wethCap, usdcCap, usdtCap, daiCap, wbtcCap, pTonCap];
@@ -39,5 +39,5 @@ module.exports = async ({
   console.log(`Caps added.`);
 };
 
-module.exports.tags = ["TrollSet5", "Test"];
+module.exports.tags = ["TrollSet7"];
 // module.exports.dependencies = ["Comptroller"];

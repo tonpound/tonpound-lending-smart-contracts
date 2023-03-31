@@ -11,8 +11,8 @@ module.exports = async ({
   const { deploy } = deployments;
   const { deployer } = await getNamedAccounts();
 
-  const unitroller = await deployments.get("Unitroller");
-  const transferAmount = parseEther("200000000");
+  // const unitroller = await deployments.get("Unitroller");
+  // const transferAmount = parseEther("200000000");
 
   const name = "Tonpound Participation Index";
   const symbol = "TPI";
@@ -20,6 +20,7 @@ module.exports = async ({
   const initMintAmount = parseEther("500000000");
   const gNft = params.gNft;
 
+  console.log(`TPI deploy`);
   const tpi = await deploy("TPI", {
     from: deployer,
     args: [name, symbol, initMintReceiver, initMintAmount, gNft],
@@ -27,10 +28,17 @@ module.exports = async ({
   console.log(`TPI deployed to ${tpi.address}`);
 
   const TPI = await getContractAt("TPI", tpi.address);
-  const tx = await TPI.transfer(unitroller.address, transferAmount);
+  console.log("Deployer balance:", await TPI.balanceOf(deployer));
+
+  console.log(`SupplyCalculator deploy...`);
+  const calculator = await deploy("SupplyCalculator", {
+    from: deployer,
+    args: [tpi.address],
+  });
+
+  const tx = await TPI.setSupplyCalculator(calculator.address);
   await tx.wait();
-  console.log("Transfer done", await TPI.balanceOf(deployer));
-  console.log("Transfer done", await TPI.balanceOf(unitroller.address));
+
 };
 
 module.exports.tags = ["TPI"];
