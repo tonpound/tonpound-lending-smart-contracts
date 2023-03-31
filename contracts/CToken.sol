@@ -1034,8 +1034,8 @@ abstract contract CToken is CTokenInterface, ExponentialNoError, TokenErrorRepor
         // totalReserves - reduceAmount
         uint totalReservesNew;
 
-        // Check caller is admin
-        if (msg.sender != admin) {
+        // Check caller is treasury
+        if (msg.sender != IComptroller(address(comptroller)).treasury()) {
             revert ReduceReservesAdminCheck();
         }
 

@@ -1,8 +1,9 @@
-// SPDX-License-Identifier: BSD-3-Clause
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.10;
 
 import "@openzeppelin/contracts/token/ERC20/extensions/draft-ERC20Permit.sol";
 import "@openzeppelin/contracts/utils/Multicall.sol";
+import "@openzeppelin/contracts/access/Ownable.sol";
 
 interface IgNFT {
     /// @notice View method to read SegmentManagement contract address
@@ -10,11 +11,18 @@ interface IgNFT {
     function SEGMENT_MANAGEMENT() external view returns (address);
 }
 
-contract TPI is ERC20Permit, Multicall {
+interface ISupplyCalculator {
+    /// @notice Calculates current circulating supply of TPI
+    /// @return Current circulating supply of TPI
+    function getCirculatingSupply() external view returns (uint256);
+}
 
+contract TPI is ERC20Permit, Multicall, Ownable {
     error NotManagement();
+    error ZeroAddress();
 
     address public immutable segmentManagement;
+    ISupplyCalculator public supplyCalculator;
 
     constructor(
         string memory name_,
@@ -37,8 +45,15 @@ contract TPI is ERC20Permit, Multicall {
 
     /// @notice View function to get current active circulating supply,
     ///         used to calculate price of gNFT segment activation
-    /// @return Total supply without specific TPI storing address, e.g. vesting
+    /// @return Current circulating supply of TPI
     function getCirculatingSupply() external view returns (uint256) {
-        return totalSupply();
+        return supplyCalculator.getCirculatingSupply();
+    }
+
+    /// @notice                  Sets supplyCalculator
+    /// @param supplyCalculator_ Address of actual supply calculator contract
+    function setSupplyCalculator(ISupplyCalculator supplyCalculator_) public onlyOwner {
+        if(address(supplyCalculator_) == address(0)) revert ZeroAddress();
+        supplyCalculator = supplyCalculator_;
     }
 }

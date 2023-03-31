@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0
 
-pragma solidity 0.8.10;
+pragma solidity ^0.8.10;
 
 import "./interfaces/IPriceOracle.sol";
 import "./UniswapLib.sol";
@@ -33,6 +33,10 @@ contract UniswapConfig {
 
     event ConfigUpdate(address indexed cToken, address uniswapMarket);
 
+    error ZeroAddress();
+    error InvalidCToken(address);
+    error InvalidMarket(address uniswapPool, address underlying);
+
     /**
      * @notice Sets config to fetch underlying price
      * @param cToken The address of the Compound Token
@@ -43,20 +47,19 @@ contract UniswapConfig {
         address uniswapMarket
         ) internal {
 
-        require(ICToken(cToken).isCToken(), "invalid cToken");
+        if(!ICToken(cToken).isCToken()) revert InvalidCToken(cToken);
         address underlying = ICToken(cToken).underlying();
 
-        require(uniswapMarket != address(0), "No market");
-        require(
-            IUniswapV3Pool(uniswapMarket).token0() == underlying || 
-            IUniswapV3Pool(uniswapMarket).token1() == underlying,
-            "invalid market"
-            );
+        if(uniswapMarket == address(0)) revert ZeroAddress();
+        if(
+            IUniswapV3Pool(uniswapMarket).token0() != underlying && 
+            IUniswapV3Pool(uniswapMarket).token1() != underlying
+        ) revert InvalidMarket(uniswapMarket, underlying);
 
         bytes32 symbolHash = keccak256(bytes(IERC20(underlying).symbol()));
         uint256 baseUnit = 10 ** IERC20(underlying).decimals();
-        bool isUniswapReversed = IUniswapV3Pool(uniswapMarket).token0() == underlying ?
-            false : true;
+        bool isUniswapReversed = 
+            IUniswapV3Pool(uniswapMarket).token0() == underlying ? false : true;
 
         cTokenConfig[cToken] = TokenConfig({
             underlying: underlying,

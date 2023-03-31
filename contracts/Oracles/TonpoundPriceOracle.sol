@@ -10,14 +10,22 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 
 contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
     
+    struct FeedData {
+        /// @notice priceFeed address
+        address priceFeed;
+        /// @notice max time between price updates
+        uint128 heartbeat;
+        /// @notice Decimals of a pricefeed
+        uint8 feedDecimals;
+        /// @notice Decimals of asset
+        uint8 assetDecimals;
+    }
+
     /// @notice ChainLink Feed address by underlying address
-    mapping(address => address) public chainLinkFeeds;
+    mapping(address => FeedData) public chainLinkFeeds;
 
-    /// @notice ChainLink Feed decimals by underlying address
-    mapping(address => uint8) public chainLinkFeedDecimals;
-
-    /// @notice assets decimals by underlying address 
-    mapping(address => uint8) public assetsDecimals;
+    /// @notice weth address
+    address public immutable baseAsset;
 
     /// @notice chainlink price feed ETH / USD
     AggregatorV3Interface public immutable baseAssetFeed;
@@ -43,6 +51,17 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
     /// @notice The event emitted when twapPeriod updated
     event NewTwapPeriod(uint256 newTwap);
 
+    error InvalidTwap();
+    error InvalidPrice();
+    error AnchorTooBig();
+    error WrongLengths();
+    error PriceConversionError();
+    error TwapNotInRange();
+    error TwatGtMax();
+    error InvalidHeartbeat();
+    error InvalidFeedDecimals();
+
+
     /**
      * @notice Construct a Uniswap anchored view for a set of token configurations
      * @dev Note that to avoid immature TWAPs, the system must run for at least a single twapPeriod before using.
@@ -53,16 +72,19 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
     constructor(
         uint32 twapPeriod_,
         address baseUnderlying,
-        AggregatorV3Interface baseAssetFeed_
+        AggregatorV3Interface baseAssetFeed_,
+        uint128 baseAssetHeartBeat
     ) {
-        require(twapPeriod_ >= 600 && twapPeriod_ < 604800, "invalid twap");
+        if(twapPeriod_ < 600 || twapPeriod_ > 604800) revert InvalidTwap();
         twapPeriod = twapPeriod_;
 
-        require(baseUnderlying != address(0), "underlying");
+        if(baseUnderlying == address(0)) revert ZeroAddress();
+        baseAsset = baseUnderlying;
         baseAssetFeed = baseAssetFeed_;
         uint8 priceFeedDecimals = baseAssetFeed_.decimals();
         baseAssetFeedDenominator = 10 ** (priceFeedDecimals - 6);
-        _setPriceFeedForUnderlyingInternal(baseUnderlying, address(baseAssetFeed_), priceFeedDecimals);
+
+        _setPriceFeedForUnderlying(baseUnderlying, address(baseAssetFeed_), baseAssetHeartBeat);
     }
 
     /// @notice Get the underlying price of a cToken asset
@@ -71,19 +93,23 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
     ///         Zero means the price is unavailable.
     function getUnderlyingPrice(address cToken) public view returns (uint) {
         address asset = ICToken(cToken).underlying();
-        if (hasFeedForAsset(asset)) {
-            return _getOraclePriceForAssetInternal(asset);
-        } else if (hasTwapForCToken(cToken)) {
-            return _fetchTwapPriceForAssetInternal(cToken);
+        uint oraclePrice = _getOraclePriceForAsset(asset);
+        if(oraclePrice != 0) {
+            return oraclePrice;
+        }
+
+        if(asset == baseAsset) {
+            // price from twap comes scaled to 1e6, thus it must be scaled to 1e18
+            return _getEthTwapPrice() * 10**12;
         } else {
-            return 0;
+            return _fetchTwapPriceForAsset(cToken);
         }
     }
 
     /// @notice Sets config to fetch underlying price
     /// @param newTwap The time interval to for TWAP price calculation
     function setTwapPeriod(uint256 newTwap) external onlyOwner {
-        require(newTwap >= 600 && newTwap < 604800, "invalid twap");
+        if(newTwap < 600 || newTwap > 604800) revert InvalidTwap();
         twapPeriod = newTwap;
         emit NewTwapPeriod(newTwap);
     }
@@ -100,14 +126,16 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
     /// @param cToken The cToken address for price retrieval
     /// @return Price denominated in USD for the given cToken address, in the format expected by the Comptroller.
     ///         (scaled by 1e(36 - assetDecimals))
-    function _fetchTwapPriceForAssetInternal(address cToken)
+    function _fetchTwapPriceForAsset(address cToken)
         internal
         view
         returns (uint256)
     {
         TokenConfig memory config = getTokenConfigByCToken(cToken);
+        if(config.underlying == address(0)) return 0;
+
         uint256 anchorPrice = calculateAnchorPriceFromEthPrice(config);
-        require(anchorPrice < 2**248, "Anchor too big");
+        if(anchorPrice >= 2**248) revert AnchorTooBig();
         // Comptroller needs prices in the format: ${raw price} * 1e36 / baseUnit
         // The baseUnit of an asset is the amount of the smallest denomination of that asset per whole.
         // For example, the baseUnit of ETH is 1e18.
@@ -146,15 +174,13 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
         int56 twapPeriod__ = int56(uint56(twapPeriod_));
         int56 timeWeightedAverageTickS56 = (tickCumulatives[1] -
             tickCumulatives[0]) / twapPeriod__;
-        require(
-            timeWeightedAverageTickS56 >= TickMath.MIN_TICK &&
-                timeWeightedAverageTickS56 <= TickMath.MAX_TICK,
-            "TWAP not in range"
-        );
-        require(
-            timeWeightedAverageTickS56 < type(int24).max,
-            "timeWeightedAverageTick > max"
-        );
+        if(
+            timeWeightedAverageTickS56 < TickMath.MIN_TICK ||
+            timeWeightedAverageTickS56 > TickMath.MAX_TICK
+        ) revert TwapNotInRange();
+
+        if(timeWeightedAverageTickS56 >= type(int24).max) revert TwatGtMax();
+
         int24 timeWeightedAverageTick = int24(timeWeightedAverageTickS56);
         if (config.isUniswapReversed) {
             // If the reverse price is desired, inverse the tick
@@ -178,9 +204,23 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
         return FullMath.mulDiv(EXP_SCALE, twapX96, FixedPoint96.Q96);
     }
 
-    /// @dev Fetches the current eth/usd price from price feed, with 6 decimals of precision.
-    function fetchEthPrice() internal view returns (uint256) {
-        return uint256(getChainLinkPrice(baseAssetFeed)) / baseAssetFeedDenominator ;
+    /// @dev Fetches the current eth/usd price from price feed or twap, with 6 decimals of precision
+    function fetchEthPrice() internal view returns (uint) {
+        (int chainLinkEthPrice, uint updatedAt) = getChainLinkPrice(baseAssetFeed);
+        if (updatedAt + chainLinkFeeds[baseAsset].heartbeat >= block.timestamp) {
+            // eth pricefeed returns value with 8 decimals, thus we scaling it to 6 
+            return uint(chainLinkEthPrice) / baseAssetFeedDenominator;
+        }
+
+        // try to get ETH price from twap if oracle is dead
+        return _getEthTwapPrice();
+    }
+
+    /// @dev Returns current eth price from uniswapV3 pool twap, with 6 decimals of precision
+    function _getEthTwapPrice() internal view returns (uint) {
+        TokenConfig memory config = getTokenConfigByUnderlying(baseAsset);
+        if(config.underlying == address(0)) return 0;
+        return getUniswapTwap(config);
     }
 
     /// @dev Fetches the current token/usd price from Uniswap, with 6 decimals of precision.
@@ -216,48 +256,42 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
         return anchorPrice;
     }
 
-    function hasTwapForCToken(address cToken) internal view returns (bool) {
-        return cTokenConfig[cToken].uniswapMarket != address(0);
-    }
-
-    function hasFeedForAsset(address asset) internal view returns (bool) {
-        return chainLinkFeeds[asset] != address(0);
-    }
 
     /* ChainLink Oracles */
 
-    function _setPriceFeedForUnderlying(address _underlying, address _chainlinkFeed, uint8 _priceFeedDecimals) onlyOwner external {
-        _setPriceFeedForUnderlyingInternal(_underlying, _chainlinkFeed, _priceFeedDecimals);
+    function setPriceFeedForUnderlying(address _underlying, address _priceFeed, uint128 _heartbeat) external onlyOwner {
+        _setPriceFeedForUnderlying(_underlying, _priceFeed, _heartbeat);
     }
 
-    function _setPriceFeedsForUnderlyings(address[] calldata _underlyings, address[] calldata _chainlinkFeeds, uint8[] calldata _priceFeedsDecimals) onlyOwner external {
-        require(_underlyings.length == _chainlinkFeeds.length, "invalid lengths");
-        require(_underlyings.length == _priceFeedsDecimals.length, "invalid lengths");
+    function setPriceFeedsForUnderlyings(
+        address[] calldata _underlyings,
+        address[] calldata _priceFeeds,
+        uint128[] calldata _heartbeats
+        ) external onlyOwner {
+        if(
+            _underlyings.length != _priceFeeds.length ||
+            _underlyings.length != _heartbeats.length
+        ) revert WrongLengths();
 
-        for (uint i = 0; i < _underlyings.length; i++) {
-            _setPriceFeedForUnderlyingInternal(_underlyings[i], _chainlinkFeeds[i], _priceFeedsDecimals[i]);
+        for (uint i = 0; i < _underlyings.length; ) {
+            _setPriceFeedForUnderlying(_underlyings[i], _priceFeeds[i], _heartbeats[i]);
+            unchecked {
+                ++i;
+            }
         }
     }
 
-    function _setPriceFeedForUnderlyingInternal(address underlying, address chainlinkFeed, uint8 priceFeedDecimals) internal {
-        address existingFeed = chainLinkFeeds[underlying];
-        // require(existingFeed == address(0), "Cannot reassign feed");
+    function _setPriceFeedForUnderlying(address underlying, address priceFeed, uint128 heartbeat) internal {
+        if(heartbeat == 0 || heartbeat > 172800) revert InvalidHeartbeat();        
 
-        uint8 decimalsForAsset;
+        uint8 feedDecimals = AggregatorV3Interface(priceFeed).decimals();
+        if(feedDecimals > 18) revert InvalidFeedDecimals();
 
-        if (underlying == address(0xEeeeeEeeeEeEeeEeEeEeeEEEeeeeEeeeeeeeEEeE)) {
-            decimalsForAsset = 18;
-        } else {
-            decimalsForAsset = IERC20(underlying).decimals();
-        }
+        uint8 assetDecimals = IERC20(underlying).decimals();
 
-        // Update if the feed is different
-        if (existingFeed != chainlinkFeed) {
-            chainLinkFeeds[underlying] = chainlinkFeed;
-            chainLinkFeedDecimals[underlying] = priceFeedDecimals;
-            assetsDecimals[underlying] = decimalsForAsset;
-            emit NewFeedForAsset(underlying, existingFeed, chainlinkFeed);
-        }
+        address oldFeed = chainLinkFeeds[underlying].priceFeed;
+        chainLinkFeeds[underlying] = FeedData(priceFeed, heartbeat, feedDecimals, assetDecimals);
+        emit NewFeedForAsset(underlying, oldFeed, priceFeed);
     }
 
     /**
@@ -266,35 +300,29 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
       * @return The asset price mantissa (scaled by 1e(36 - assetDecimals)).
       *  Zero means the price is unavailable.
       */
-    function _getOraclePriceForAssetInternal(address asset) internal view returns (uint) {
-        uint8 feedDecimals = chainLinkFeedDecimals[asset];
-        uint8 assetDecimals = assetsDecimals[asset];
-        address feed = chainLinkFeeds[asset];
-        int feedPriceRaw = getChainLinkPrice(AggregatorV3Interface(feed));
-        uint feedPrice = uint(feedPriceRaw);
-
-        // Safety
-        require(feedPriceRaw == int(feedPrice), "Price Conversion error");
-
-        // Needs to be scaled to e36 and then divided by the asset's decimals
-        if (feedDecimals == 8) {
-            return (1e28 * feedPrice) / (10 ** assetDecimals);
-        } else if (feedDecimals == 18) {
-            return (1e18 * feedPrice) / (10 ** assetDecimals);
-        } else {
+    function _getOraclePriceForAsset(address asset) internal view returns (uint) {
+        FeedData memory feedData = chainLinkFeeds[asset];
+        if (feedData.priceFeed == address(0)) {
             return 0;
         }
+        
+        (int feedPriceRaw, uint256 updatedAt) = getChainLinkPrice(AggregatorV3Interface(feedData.priceFeed));
+        if (updatedAt + feedData.heartbeat < block.timestamp) {
+            // feed data too old
+            return 0;
+        }
+        uint feedPrice = uint(feedPriceRaw);
+        // Safety
+        if(feedPriceRaw != int(feedPrice)) revert PriceConversionError();
+
+        // Needs to be scaled to e36 and then divided by the asset's decimals
+        return (feedPrice * 10**(36 - feedData.feedDecimals)) / (10 ** feedData.assetDecimals);
     }
 
-    function getChainLinkPrice(AggregatorV3Interface priceFeed) internal view returns (int) {
-        (
-        uint80 roundID,
-        int price,
-        uint startedAt,
-        uint timeStamp,
-        uint80 answeredInRound
-        ) = priceFeed.latestRoundData();
-        return price;
+    /// @notice Returns latest price from chainlink and lastTime price was updated
+    function getChainLinkPrice(AggregatorV3Interface priceFeed) internal view returns (int, uint) {
+        (, int price, , uint updatedAt, ) = priceFeed.latestRoundData();
+        return (price, updatedAt);
     }
 
     /// @notice         Evaluates input amount according to stored price, accrues interest
@@ -308,7 +336,7 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
     function getEvaluation(address cToken, uint256 amount, bool reverse) external returns (uint256) {
         Exp memory exchangeRate = Exp({mantissa: ICToken(cToken).exchangeRateCurrent()});
         uint256 oraclePriceMantissa = getUnderlyingPrice(cToken);        
-        require(oraclePriceMantissa != 0, "invalid price");
+        if(oraclePriceMantissa == 0) revert InvalidPrice();
         Exp memory oraclePrice = Exp({mantissa: oraclePriceMantissa});
 
         if (reverse) {
@@ -326,7 +354,6 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
         return underlyingAmountUSD;
     }
 
-
     /// @notice         Evaluates input amount according to stored price, doesn't accrue interest
     /// @param cToken   Market to evaluate
     /// @param amount   Amount of tokens to evaluate according to 'reverse' order
@@ -337,9 +364,8 @@ contract TonpoundPriceOracle is ExponentialNoError, UniswapConfig, Ownable {
     ///                            e.g. 123e18 = 123.00$
     function getEvaluationStored(address cToken, uint256 amount, bool reverse) external view returns (uint256) {
         Exp memory exchangeRate = Exp({mantissa: ICToken(cToken).exchangeRateStored()});
-        // uint256 underlyingDecimals = IERC20(cToken.underlying()).decimals();
         uint256 oraclePriceMantissa = getUnderlyingPrice(cToken);
-        require(oraclePriceMantissa != 0, "invalid price");
+        if(oraclePriceMantissa == 0) revert InvalidPrice();
         Exp memory oraclePrice = Exp({mantissa: oraclePriceMantissa});
 
         if (reverse) {
